@@ -1,14 +1,15 @@
 name: 'GitHub Actions CloudFlare2DNSPod Bot'
 
 on:
-  workflow_dispatch:
+  push:
+    branches: 
+      - master
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/16 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
@@ -25,10 +26,3 @@ jobs:
           SECRETID: ${{ secrets.SECRETID }}
           SECRETKEY: ${{ secrets.SECRETKEY }}
         run: python cf2dns_actions.py
-      
-      - name: Remove old Workflow
-        uses: GitRML/delete-workflow-runs@main
-        with:
-          retain_days: 2
-          keep_minimum_runs: 3
- 
